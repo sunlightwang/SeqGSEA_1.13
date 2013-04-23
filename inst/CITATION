@@ -8,5 +8,5 @@ citEntry(
  volume=NA, 
  pages=NA, 
  year=2013, 
- textVersion="Wang X and Cairns MJ (2013). Gene Set Enrichment Analysis of RNA-Seq Data: Integrating Differential Expression and Splicing. BMC Bioinformatics, in press"
+ textVersion="Wang X and Cairns MJ (2013). Gene Set Enrichment Analysis of RNA-Seq Data: Integrating Differential Expression and Splicing. BMC Bioinformatics, 14(Suppl 5):S16."
 )
