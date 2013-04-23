@@ -23,7 +23,7 @@ method using data-set-specific ranks.
 A vector of gene scores. 
 }
 \references{
-Xi Wang and Murray J. Cairns (2013). Gene Set Enrichment Analysis of RNA-Seq Data: Integrating Differential Expression and Splicing. BMC Bioinformatics, in press
+Xi Wang and Murray J. Cairns (2013). Gene Set Enrichment Analysis of RNA-Seq Data: Integrating Differential Expression and Splicing. BMC Bioinformatics, 14(Suppl 5):S16.
 }
 \author{
 Xi Wang, xi.wang@newcastle.edu.au

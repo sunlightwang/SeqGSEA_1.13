@@ -19,7 +19,7 @@ GSEnrichAnalyze(gene.set, gene.score, gene.score.perm, weighted.type = 1)
 A SeqGeneSet object with many slots updated, such as \code{GSEA.ES} and \code{GSEA.pval}.
 }
 \references{
-Xi Wang and Murray J. Cairns (2013). Gene Set Enrichment Analysis of RNA-Seq Data: Integrating Differential Expression and Splicing. BMC Bioinformatics, in press
+Xi Wang and Murray J. Cairns (2013). Gene Set Enrichment Analysis of RNA-Seq Data: Integrating Differential Expression and Splicing. BMC Bioinformatics, 14(Suppl 5):S16.
 }
 \author{
 Xi Wang, xi.wang@newcastle.edu.au

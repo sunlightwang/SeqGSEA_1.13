@@ -23,7 +23,7 @@ The results with the output of \code{\link{DENBStatPermut4GSEA}} can also be use
 A data frame containing each gene's expression means and variances in each group, and each gene's DE NB-statistics. 
 }
 \references{
-Xi Wang and Murray J. Cairns (2013). Gene Set Enrichment Analysis of RNA-Seq Data: Integrating Differential Expression and Splicing. BMC Bioinformatics, in press
+Xi Wang and Murray J. Cairns (2013). Gene Set Enrichment Analysis of RNA-Seq Data: Integrating Differential Expression and Splicing. BMC Bioinformatics, 14(Suppl 5):S16.
 }
 \author{
 Xi Wang, xi.wang@newcastle.edu.au
