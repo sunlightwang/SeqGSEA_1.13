@@ -199,3 +199,16 @@ writeSigGeneSet <- function(gene.set, i, gene.score, file="") {
   write.table(sort(gene.score[gs@GS[[1]]], decreasing=TRUE), file=file, quote=FALSE, sep="\t", col.names=FALSE, append=TRUE)
 }
 
+writeScores <- function(DEscore, DSscore, geneScore=NULL, geneScoreAttr=NULL, file="") {
+  stopifnot(length(DEscore) == length(DSscore))
+  if(! is.null(geneScore)) { 
+    stopifnot(length(DEscore) == length(geneScore))
+  }
+  
+  data <- data.frame(cbind(DEscore, DSscore, geneScore)) 
+  if(! is.null(geneScore) && ! is.null(geneScoreAttr)) {
+    colnames(data)[3] <- paste("geneScore", "(", geneScoreAttr, ")", sep="")
+  }
+  
+  write.table(data, file = file, quote = FALSE, sep = "\t")
+}
