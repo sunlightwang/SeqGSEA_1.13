@@ -54,7 +54,8 @@ export(
     "topDSExons",
     "topDSGenes",
     "topGeneSets",
-    "writeSigGeneSet"
+    "writeSigGeneSet",
+    "writeScores"
 )
 exportMethods(
     "counts",
