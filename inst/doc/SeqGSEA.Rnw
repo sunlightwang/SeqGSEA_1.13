@@ -98,7 +98,7 @@ respectively. A guide to parallelize those analyses is given in Section \ref{sec
 To cite this package, please cite the article below: \\
 Wang X and Cairns MJ (2013). Gene set enrichment analysis of RNA-Seq data: 
 integrating differential expression and splicing. 
-BMC Bioinformatics, in press. 
+BMC Bioinformatics, 14(Suppl 5):S16. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Differential splicing analysis and DS scores}\label{sec:DS}
