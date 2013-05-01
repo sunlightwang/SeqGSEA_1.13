@@ -212,3 +212,4 @@ writeScores <- function(DEscore, DSscore, geneScore=NULL, geneScoreAttr=NULL, fi
   
   write.table(data, file = file, quote = FALSE, sep = "\t")
 }
+
