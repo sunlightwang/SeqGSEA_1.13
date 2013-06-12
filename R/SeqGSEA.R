@@ -70,37 +70,33 @@ convertEnsembl2Symbol <- function(ensembl.genes) {
   require(biomaRt)
   ensembl = useMart("ensembl",dataset="hsapiens_gene_ensembl")
   getBM(values = ensembl.genes, attributes = c('ensembl_gene_id','hgnc_symbol'), 
-        filters = 'ensembl_gene_id', mart = ensembl )
+        filters = 'ensembl_gene_id', mart = ensembl, bmHeader=FALSE )
 }
 
 convertSymbol2Ensembl <- function(symbols) {
   require(biomaRt)
   ensembl = useMart("ensembl",dataset="hsapiens_gene_ensembl")
   getBM(values = symbols, attributes = c('hgnc_symbol', 'ensembl_gene_id'), 
-        filters = 'hgnc_symbol', mart = ensembl )
+        filters = 'hgnc_symbol', mart = ensembl, bmHeader=FALSE )
 }
 
 loadGenesets <- function(geneset.file, geneIDs, geneID.type=c("gene.symbol","ensembl"), 
                          genesetsize.min = 5, genesetsize.max = 1000) {
   # geneIDs can contain more than one genes, splited by '+' (because of HTSeq counting)
   # geneIDs can be in either "gene symbols" or "ensembl gene names"
-  str.temp <- unlist(strsplit(geneset.file, "\\/"))
-  geneset.name <- str.temp[length(str.temp)]
+  geneset.name <- basename(geneset.file)
   geneIDs <- unique(as.character(geneIDs))
   nGeneID <- length(geneIDs)
   geneID.type <- match.arg(geneID.type, c("gene.symbol","ensembl"))
-  uniGenes <- character(0)
-  idxGenes <- numeric(0)
-  for (i in 1:nGeneID) {
-    temp.genes <- unlist(strsplit(as.character(geneIDs[i]),"\\+"))
-    uniGenes <- c(uniGenes, temp.genes)
-    idxGenes <- c(idxGenes, rep(i,length(temp.genes) ) ) 
-  }
+  splitGeneIDs <- strsplit(as.character(geneIDs), "+", fixed=TRUE)
+  uniGenes <- unlist(splitGeneIDs, use.names=FALSE)
+  idxGenes <- rep(seq_along(splitGeneIDs), sapply(splitGeneIDs, length))
   stopifnot( length(uniGenes) == length(idxGenes))
   if (geneID.type == "ensembl") {
     temp = convertEnsembl2Symbol(uniGenes)
     idx <- data.frame(idx=idxGenes, ensembl = uniGenes, 
-                      symbol = rep(NA_character_, length(uniGenes)), row.names=uniGenes)
+                      symbol = rep(NA_character_, length(uniGenes)),
+                      row.names=uniGenes)
     idx$symbol <- temp$hgnc_symbol [ match( uniGenes, temp$ensembl_gene_id ) ]
     
     # solving duplicated mapping (say, one ensembl ID maps to multiply gene symbols)
