@@ -673,7 +673,7 @@ such analysis. It includes 4 steps as follows.
   rm(list=ls())
   # input count data files
   data.dir <- system.file("extdata", package="SeqGSEA", mustWork=TRUE)
-  count.file <- paste(data.dir,"geneCounts.txt",sep="\\")
+  count.file <- paste(data.dir,"geneCounts.txt",sep="/")
   # gene set file
   geneset.file <- system.file("extdata", "gs_symb.txt",  
                               package="SeqGSEA", mustWork=TRUE)
