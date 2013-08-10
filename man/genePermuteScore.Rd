@@ -7,7 +7,7 @@ Calculate gene scores on permutation data sets
 Calculate gene scores on permutation data sets
 }
 \usage{
-genePermuteScore(DEscoreMat, DSscoreMat, method = c("linear", "quadratic", "rank"), 
+genePermuteScore(DEscoreMat, DSscoreMat = NULL, method = c("linear", "quadratic", "rank"), 
                  DEweight = 0.5)
 }
 \arguments{
@@ -17,8 +17,10 @@ genePermuteScore(DEscoreMat, DSscoreMat, method = c("linear", "quadratic", "rank
   \item{DEweight}{any number between 0 and 1 (included), the weight of differential expression scores (the weight for differential splice is (1-DEweight)).}
 }
 \details{
-The integration methods are detailed in Wang and Cairns (2013). Here the rank method refers only to the 
-method using data-set-specific ranks. 
+The integration methods including "linear", "quadratic", and "rank" are detailed in Wang and Cairns (2013).
+Here the rank method refers only to the method using data-set-specific ranks.
+
+For DE-only analysis, just specify DEweight to be 1, and the DSscoreMat value can be NULL.
 }
 \value{
 A gene score matrix. 
@@ -35,5 +37,8 @@ Xi Wang, xi.wang@newcastle.edu.au
 \examples{
 data(DEscore.perm, package="SeqGSEA")
 data(DSscore.perm, package="SeqGSEA")
+# linear combination with weight for DE 0.3 
 gene.score.perm <- genePermuteScore(DEscore.perm, DSscore.perm, method="linear",  DEweight=0.3)
+# DE only analysis 
+gene.score.perm <- genePermuteScore(DEscore.perm, DEweight=1)
 }

@@ -7,7 +7,7 @@ Calculate gene scores by integrating DE and DS scores
 Calculate gene scores by integrating DE and DS scores 
 }
 \usage{
-geneScore(DEscore, DSscore, method = c("linear", "quadratic", "rank"), DEweight = 0.5)
+geneScore(DEscore, DSscore = NULL, method = c("linear", "quadratic", "rank"), DEweight = 0.5)
 }
 \arguments{
   \item{DEscore}{normalized DE scores. }
@@ -16,8 +16,10 @@ geneScore(DEscore, DSscore, method = c("linear", "quadratic", "rank"), DEweight 
   \item{DEweight}{any number between 0 and 1 (included), the weight of differential expression scores (the weight for differential splice is (1-DEweight)).}
 }
 \details{
-The integration methods are detailed in Wang and Cairns (2013). Here the rank method refers only to the 
-method using data-set-specific ranks. 
+The integration methods including "linear", "quadratic", and "rank" are detailed in Wang and Cairns (2013). 
+Here the rank method refers only to the method using data-set-specific ranks. 
+
+For DE-only analysis, just specify DEweight to be 1, and the DSscore value can be NULL. 
 }
 \value{
 A vector of gene scores. 
@@ -34,5 +36,8 @@ Xi Wang, xi.wang@newcastle.edu.au
 \examples{
 data(DEscore, package="SeqGSEA")
 data(DSscore, package="SeqGSEA")
+# linear combination with weight for DE 0.3 
 gene.score <- geneScore(DEscore, DSscore, method="linear", DEweight = 0.3)
+# DE only analysis 
+gene.score <- geneScore(DEscore, DEweight = 1) 
 }

@@ -11,42 +11,57 @@ scoreNormalization <- function(scores, norm.factor) {
   scores
 }
 
-geneScore <- function(DEscore, DSscore, method=c("linear","quadratic","rank"), DEweight=0.5) {
+geneScore <- function (DEscore, DSscore = NULL,
+                       method = c("linear", "quadratic", "rank"),
+                       DEweight = 0.5) {
 # DEscore: differential expression score 
 # DSscore: differential splicing score
 # Method: linear: weigth * a + (1 - weight) * b
 #         quadratic:  sqrt(weigth * a ^ 2 + (1 - weight) * b ^ 2)
 #         rank: (rank_a * a + rank_b * b) / (rank_a + rank_b), where ranks are in ascending order
 # DEweight: the weight for DE, (1-DEweight) for DS
-  stopifnot( length(DEscore) == length(DSscore))
-  DEscore[ is.na(DEscore) | is.infinite(DEscore) ] <- 0
-  DSscore[ is.na(DSscore) | is.infinite(DSscore) ] <- 0
-  method <- match.arg(method, c("linear","quadratic","rank"))
+  DEscore[is.na(DEscore) | is.infinite(DEscore)] <- 0
+  if(DEweight == 1) return(DEscore)
+  stopifnot(!is.null(DSscore))
+  stopifnot(length(DEscore) == length(DSscore))
+  DSscore[is.na(DSscore) | is.infinite(DSscore)] <- 0
+  if(DEweight == 0) return(DSscore)
+
+  method <- match.arg(method, c("linear", "quadratic", "rank"))
   switch(method, linear = {
     DEscore * DEweight + DSscore * (1 - DEweight)
   }, quadratic = {
-    sqrt( DEscore ^ 2 * DEweight + DSscore ^ 2 * (1 - DEweight) )
+    sqrt(DEscore^2 * DEweight + DSscore^2 * (1 - DEweight))
   }, rank = {
-    DErank <- rank(DEscore, ties.method="min")
-    DSrank <- rank(DSscore, ties.method="min")
-    ( DEscore * DErank * DEweight + DSscore * DSrank * (1 - DEweight) ) / (DErank * DEweight + DSrank * (1 - DEweight) ) 
+    DErank <- rank(DEscore, ties.method = "min")
+    DSrank <- rank(DSscore, ties.method = "min")
+    (DEscore * DErank * DEweight + DSscore * DSrank *
+       (1 - DEweight))/(DErank * DEweight + DSrank * (1 - DEweight))
   })
 }
 
-genePermuteScore <- function(DEscoreMat, DSscoreMat, method=c("linear","quadratic","rank"), DEweight=0.5) {
+genePermuteScore <- function (DEscoreMat, DSscoreMat = NULL,
+                              method = c("linear", "quadratic", "rank"),
+                              DEweight = 0.5) {
 # parameters as function `geneScore`
-  stopifnot(all(dim(DEscoreMat) == dim(DSscoreMat)))
   DEscoreMat[is.na(DEscoreMat)] <- 0
-  DSscoreMat[is.na(DSscoreMat)] <- 0  
-  method <- match.arg(method, c("linear","quadratic","rank"))
+  if(DEweight == 1) return(DEscoreMat)
+  stopifnot(!is.null(DSscoreMat))
+  stopifnot(all(dim(DEscoreMat) == dim(DSscoreMat)))
+  DSscoreMat[is.na(DSscoreMat)] <- 0
+  if(DEweight == 0) return(DSscoreMat)
+
+  method <- match.arg(method, c("linear", "quadratic", "rank"))
   switch(method, linear = {
     DEscoreMat * DEweight + DSscoreMat * (1 - DEweight)
   }, quadratic = {
-    sqrt( DEscoreMat ^ 2 * DEweight + DSscoreMat ^ 2 * (1 - DEweight) )
+    sqrt(DEscoreMat^2 * DEweight + DSscoreMat^2 * (1 - DEweight))
   }, rank = {
-    DErankMat <- apply(DEscoreMat, 2, rank, ties.method="min")
-    DSrankMat <- apply(DSscoreMat, 2, rank, ties.method="min")
-    ( DEscoreMat * DErankMat * DEweight + DSscoreMat * DSrankMat * (1 - DEweight) ) / (DErankMat * DEweight + DSrankMat * (1 - DEweight) ) 
+    DErankMat <- apply(DEscoreMat, 2, rank, ties.method = "min")
+    DSrankMat <- apply(DSscoreMat, 2, rank, ties.method = "min")
+    (DEscoreMat * DErankMat * DEweight + DSscoreMat * DSrankMat *
+       (1 - DEweight))/(DErankMat * DEweight + DSrankMat *
+                          (1 - DEweight))
   })
 }
 
