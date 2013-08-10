@@ -147,7 +147,7 @@ genpermuteMat <- function(obj, times = 1000) {
   if( is( obj, "ReadCountSet" ) ) {
     label <- as.numeric(pData(obj)$label) - 1
   } else { 
-    label <- obj 
+    label <- as.numeric(obj) - 1 
   }  
   n_sam <- length(label)
   permuteMat <- matrix(0, n_sam, times)
