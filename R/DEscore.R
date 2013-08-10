@@ -94,7 +94,7 @@ DENBStatPermut4GSEA <- function(DEG, permuteMat) {
   n_gene <- nrow(counts(DEG))
   #permuteNBstatGene <- matrix(NA_real_, n_gene, times)
   #for(i in 1:times) {
-  foreach(i = 1:times, .combine='cbind') %dopar% {
+  foreach(i = 1:times, .combine='cbind', .packages = c("DESeq", "SeqGSEA"))  %dopar% {
     conditions(DEG) <- as.factor(permuteMat[,i])
     DEG <- estimateDispersions(DEG, method="per-condition", sharingMode="gene-est-only")
     DEGresPerm <- DENBStat4GSEA( DEG ) 

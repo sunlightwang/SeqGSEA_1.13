@@ -720,6 +720,7 @@ such analysis. It includes 4 steps as follows.
 \item [Step 3:] main GSEA
 <<main_gsea_DE>>=
   # load gene set data
+  geneIDs <- rownames(geneCounts)
   gene.set <- loadGenesets(geneset.file, geneIDs, geneID.type="ensembl",
                              genesetsize.min = 5, genesetsize.max = 1000)
   # enrichment analysis
