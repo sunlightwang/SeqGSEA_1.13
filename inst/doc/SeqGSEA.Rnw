@@ -697,6 +697,7 @@ such analysis. It includes 4 steps as follows.
   DEG <-runDESeq(geneCounts, label)
   DEGres <- DENBStat4GSEA(DEG)
   # calculate DE NB statistics on the permutation data sets
+  permuteMat <- genpermuteMat(label, times=perm.times)
   DEpermNBstat <- DENBStatPermut4GSEA(DEG, permuteMat) # permutation
 @
 

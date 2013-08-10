@@ -4,13 +4,13 @@
 Generate permutation matrix 
 }
 \description{
-Generate permutation matrix.
+Generate permutation matrix from ReadCountSet objects or from label vectors. 
 }
 \usage{
-genpermuteMat(RCS, times = 1000)
+genpermuteMat(obj, times = 1000)
 }
 \arguments{
-  \item{RCS}{a ReadCountSet object. This function needs the original sample label information from the ReadCountSet object. }
+  \item{obj}{a ReadCountSet object or a label vector. This function needs the original sample label information to generate permutation matrix. }
   \item{times}{an integer indication the times of permutation. }
 }
 \value{
