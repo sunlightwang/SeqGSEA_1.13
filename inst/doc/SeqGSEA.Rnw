@@ -554,6 +554,20 @@ system.file("extscripts", package="SeqGSEA", mustWork=TRUE)
 Simply by typing ``python'' + the file name of echo script in your shell console, 
 the help documentation will be on your screen. 
 
+Other than the Python scripts provided, users who prefer playing with \R{}/{\tt Bioconductor} packages can also use \Rfunction{easyRNASeq} in \Rpackage{easyRNASeq}, 
+\Rfunction{summarizeOverlaps} in \Rpackage{GenomicRanges}, and \Rfunction{featureCounts}
+in \Rpackage{Rsubread} to count reads that mapped to each exon. Please refer to respective
+packages for detailed usage. 
+
+For users who are not familiar with RNA-Seq data processing, the upstream steps of counting 
+reads are (1) data preprocessing, including adapter removal, low-quality read filtering, data 
+quality-control analysis, and (2) read mapping. \R{}/{\tt Bioconductor} users
+can apply \Rpackage{Rsubread} to map reads based on a seed-and-vote approach, as 
+well as a few QC analysis. Users familiar with command-line can choose from a wide 
+range of tools, such as already widely used ones including {\tt TopHat} 
+(\url{http://tophat.cbcb.umd.edu}), {\tt START} 
+(\url{http://code.google.com/p/rna-star}), and etc..
+
 %------------------------------------------------------------------
 \subsection{Exemplified pipeline for integrating DE and DS}
 %------------------------------------------------------------------
@@ -638,8 +652,6 @@ We divide the process into five steps for a complete SeqGSEA run.
   #plotGeneScore(gene.score, gene.score.perm, 
   #              pdf=paste(output.prefix,".GeneScore.pdf",sep=""))
 @
-\fixme{If users would like to run SeqGSEA with different weighting parameters or different 
-integration methods, how can they avoid repetitive calculations of DE and DS scores. } 
 
 \item [Step 4:] main GSEA
 <<main_gsea>>=
@@ -659,6 +671,12 @@ integration methods, how can they avoid repetitive calculations of DE and DS sco
 @
 \end{description}
 
+For gene sets used in Step 4, while we recommend users directly download and 
+use those already well-formatted gene sets from MSigDB 
+(\url{http://www.broadinstitute.org/gsea/msigdb/index.jsp}), users can also 
+feed whatever gene sets to SeqGSEA as long as they are in the GMT format. 
+Please refer to the following URL for details: 
+\url{http://www.broadinstitute.org/cancer/software/gsea/wiki/index.php/Data_formats}.
 
 %------------------------------------------------------------------
 \subsection{Exemplified pipeline for DE-only analysis}
@@ -733,6 +751,48 @@ such analysis. It includes 4 steps as follows.
   #            quote=FALSE, sep="\t", row.names=FALSE)
   #plotES(gene.set, pdf=paste(output.prefix,".GSEA.ES.pdf",sep=""))
   #plotSig(gene.set, pdf=paste(output.prefix,".GSEA.FDR.pdf",sep=""))
+@
+\end{description}
+
+%------------------------------------------------------------------
+\subsection{One-step SeqGSEA analysis}
+%------------------------------------------------------------------
+While users can choose to run SeqGSEA step by step in a well-controlled manner (see above), 
+the one-step SeqGSEA analysis with an all-in \Rfunction{runSeqGSEA} function 
+enables users to run SeqGSEA in the easiest way. With the \Rfunction{runSeqGSEA} 
+function, users can also test multiple weights for integrating DE and DS scores. 
+DE-only analysis starting with exon read counts is also supported in 
+the all-in function. 
+
+Follow the example below to start your first SeqGSEA analysis now! 
+
+\begin{description}
+<<runSeqGSEA>>=
+  ### Initialization ###
+  # input file location and pattern
+  data.dir <- system.file("extdata", package="SeqGSEA", mustWork=TRUE)
+  case.pattern <- "^SC" # file name starting with "SC"
+  ctrl.pattern <- "^SN" # file name starting with "SN"
+  # gene set file and type
+  geneset.file <- system.file("extdata", "gs_symb.txt",
+                              package="SeqGSEA", mustWork=TRUE)
+  geneID.type <- "ensembl"
+  # output file prefix
+  output.prefix <- "K:/UoN/SeqGSEA/example"
+  # analysis parameters
+  nCores <- 8
+  perm.times <- 1000 # >= 1000 recommended
+  DEonly <- FALSE
+  DEweight <- c(0.2, 0.5, 0.8)  # a vector for different weights
+  integrationMethod <- "linear"
+
+  ### one step SeqGSEA running ###
+  # NOT run in the example; uncomment the following 4 lines to run 
+  # CAUTION: running the following lines will generate lots of files in your working dir
+  #runSeqGSEA(data.dir=data.dir, case.pattern=case.pattern, ctrl.pattern=ctrl.pattern, 
+  #           geneset.file=geneset.file, geneID.type=geneID.type, output.prefix=output.prefix,
+  #           nCores=nCores, perm.times=perm.times, integrationMethod=integrationMethod,
+  #           DEonly=DEonly, DEweight=DEweight)
 @
 \end{description}
 
