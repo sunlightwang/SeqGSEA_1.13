@@ -142,7 +142,7 @@ estiGeneNBstat <- function(RCS) {
   RCS
 }
 
-genpermuteMat <- function(obj, times = 1000) {
+genpermuteMat <- function(obj, times = 1000, seed = NULL) {
   stopifnot( is( obj, "ReadCountSet" ) | is.factor(obj) )
   if( is( obj, "ReadCountSet" ) ) {
     label <- as.numeric(pData(obj)$label) - 1
@@ -151,6 +151,7 @@ genpermuteMat <- function(obj, times = 1000) {
   }  
   n_sam <- length(label)
   permuteMat <- matrix(0, n_sam, times)
+  set.seed(seed)
   for(i in 1:times) {
     permuteMat[,i] <- label[sample(n_sam,n_sam)]
   }

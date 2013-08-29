@@ -121,10 +121,10 @@ plotSigGeneSet <- function(gene.set, i, gene.score, pdf=NULL) {
   gene.score.line <- (gene.score.sorted - min.genescore)/(max.genescore - min.genescore) *1.25*delta + min.plot
   zero.genescore.line <- (- min.genescore/(max.genescore - min.genescore)) *1.25*delta + min.plot
   
-  def.par <- par(no.readonly = TRUE)
-  nf <- layout(matrix(c(1,2), 1, 2, byrow=T), 1, c(1, 1), TRUE)
   if(! is.null(pdf))
     pdf(file = pdf, height = 6, width = 10)
+  def.par <- par(no.readonly = TRUE)
+  nf <- layout(matrix(c(1,2), 1, 2, byrow=T), 1, c(1, 1), TRUE)
   
   # (1) Running enrichment plot
   main.string <- paste("Gene Set No.", i, ":", gs@GSNames)
@@ -200,16 +200,13 @@ writeSigGeneSet <- function(gene.set, i, gene.score, file="") {
 }
 
 writeScores <- function(DEscore, DSscore, geneScore=NULL, geneScoreAttr=NULL, file="") {
-  stopifnot(length(DEscore) == length(DSscore))
-  if(! is.null(geneScore)) { 
+  if(! is.null(DSscore))
+    stopifnot(length(DEscore) == length(DSscore))
+  if(! is.null(geneScore)) 
     stopifnot(length(DEscore) == length(geneScore))
-  }
-  
   data <- data.frame(cbind(DEscore, DSscore, geneScore)) 
   if(! is.null(geneScore) && ! is.null(geneScoreAttr)) {
-    colnames(data)[3] <- paste("geneScore", "(", geneScoreAttr, ")", sep="")
+    colnames(data)[ncol(data)] <- paste("geneScore", "(", geneScoreAttr, ")", sep="")
   }
-  
   write.table(data, file = file, quote = FALSE, sep = "\t")
 }
-

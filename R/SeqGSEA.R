@@ -298,3 +298,124 @@ topGeneSets <- function(gene.set, n = 20, sortBy = c("FDR", "pvalue", "FWER"), G
   res
 }
 
+runSeqGSEA <- function(data.dir, case.pattern, ctrl.pattern, geneset.file, 
+                       output.prefix, topGS=10, 
+                       geneID.type=c("gene.symbol", "ensembl"), 
+                       nCores=1, perm.times=1000, seed=NULL, minExonReadCount=5, 
+                       integrationMethod=c("linear", "quadratic", "rank"),
+                       DEweight=c(0.5), DEonly=FALSE, 
+                       minGSsize=5, maxGSsize=1000, GSEA.WeightedType=1) 
+## Assuming starting with exon reads counts, even for DEonly analysis
+{
+  # 0 # prepairation
+  # input count data files
+  case.files <- dir(data.dir, pattern=case.pattern, full.names = TRUE)
+  control.files <- dir(data.dir, pattern=ctrl.pattern, full.names = TRUE)
+  stopifnot (length(case.files)> 0)
+  stopifnot (length(control.files)> 0)
+  
+  # setup parallel backend
+  if (nCores > 1) {
+    cl <- makeCluster(nCores)
+    registerDoParallel(cl) # parallel backend registration
+  }
+  
+  # 1 # DS analysis
+  # load exon read count data
+  RCS <- loadExonCountData(case.files, control.files)
+  # remove genes with low exprssion
+  RCS <- exonTestability(RCS, cutoff=minExonReadCount)
+  geneTestable <- geneTestability(RCS)
+  RCS <- subsetByGenes(RCS, unique(geneID(RCS))[ geneTestable ])
+  # get gene IDs, which will be used in initialization of gene set
+  geneIDs <- unique(geneID(RCS))
+  permuteMat <- genpermuteMat(RCS, times=perm.times, seed=seed)
+  
+  if(! DEonly) {
+    # calculate DS NB statistics
+    RCS <- estiExonNBstat(RCS)
+    RCS <- estiGeneNBstat(RCS)
+    # calculate DS NB statistics on the permutation data sets
+    RCS <- DSpermute4GSEA(RCS, permuteMat)    
+  }
+
+  # 2 # DE analysis
+  # get gene read counts
+  geneCounts <- getGeneCount(RCS)
+  # calculate DE NB statistics
+  label <- label(RCS)
+  DEG <-runDESeq(geneCounts, label)
+  DEGres <- DENBStat4GSEA(DEG)
+  # calculate DE NB statistics on the permutation data sets
+  DEpermNBstat <- DENBStatPermut4GSEA(DEG, permuteMat) # permutation
+  
+  # 3 #  score normalization
+  # DE score normalization
+  DEscore.normFac <- normFactor(DEpermNBstat)
+  DEscore <- scoreNormalization(DEGres$NBstat, DEscore.normFac)
+  DEscore.perm <- scoreNormalization(DEpermNBstat, DEscore.normFac)
+  if(DEonly) {
+    DSscore <- NULL
+    DSscore.perm <- NULL
+  } else {
+    # DS score normalization
+    DSscore.normFac <- normFactor(RCS@permute_NBstat_gene)
+    DSscore <- scoreNormalization(RCS@featureData_gene$NBstat, DSscore.normFac)
+    DSscore.perm <- scoreNormalization(RCS@permute_NBstat_gene, DSscore.normFac)
+  }
+  
+  # visilization of DE & DS scores
+  if(! DEonly) {
+    plotGeneScore(DEscore, DEscore.perm, pdf=paste(output.prefix,".DEScore.pdf",sep=""), main="Expression")
+    plotGeneScore(DSscore, DSscore.perm, pdf=paste(output.prefix,".DSScore.pdf",sep=""), main="Splicing")
+  }
+  # output DE and DS scores
+  writeScores(DEscore, DSscore, file = paste(output.prefix,".DEDS_Score.txt",sep=""))
+  
+  if(DEonly) 
+    DEweight <- 1
+  GSEAres.list <- vector("list", length(DEweight))
+  names(GSEAres.list) <- paste0("weight",sub(".", "_", DEweight, fixed =TRUE))
+  for(i in 1:length(DEweight)) {
+    if (DEweight[i] == 1) {
+      output.prefix0 <- paste0(output.prefix, ".DEonly")
+    } else if (DEweight[i] == 0) {
+      output.prefix0 <- paste0(output.prefix, ".DSonly")
+    } else 
+      output.prefix0 <- paste0(output.prefix, ".weight", sub(".", "_", DEweight[i], fixed =TRUE))
+    
+    # 4 # score integration
+    gene.score <- geneScore(DEscore, DSscore, method=integrationMethod, DEweight=DEweight[i])
+    gene.score.perm <- genePermuteScore(DEscore.perm, DSscore.perm, method=integrationMethod, DEweight=DEweight[i])
+    # visilization of gene scores
+    plotGeneScore(gene.score, gene.score.perm, pdf=paste(output.prefix0,".GeneScore.pdf",sep=""))
+    # output gene score
+    writeScores(DEscore, DSscore, geneScore = gene.score, 
+                geneScoreAttr = paste(integrationMethod, DEweight[i], sep=","),
+                file = paste(output.prefix0,".GeneScore.txt",sep=""))
+    
+    # 5 #  main GSEA
+    # load gene set data
+    gene.set <- loadGenesets(geneset.file, geneIDs, geneID.type=geneID.type,
+                             genesetsize.min = minGSsize, genesetsize.max = maxGSsize)
+    # enrichment analysis
+    gene.set <- GSEnrichAnalyze(gene.set, gene.score, gene.score.perm, weighted.type=GSEA.WeightedType)
+    # format enrichment analysis results
+    GSEAres <- GSEAresultTable(gene.set, TRUE)
+    GSEAres.list[[i]] <- GSEAres
+    
+    # 6 #output results
+    plotES(gene.set, pdf=paste(output.prefix0,".SeqGSEA.EnrichScore.pdf",sep=""))
+    plotSig(gene.set, pdf=paste(output.prefix0,".SeqGSEA.FDR.pdf",sep="")) 
+    write.table(GSEAres, paste(output.prefix0,".SeqGSEA.result.txt",sep=""),
+                quote=FALSE, sep="\t", row.names=FALSE)
+    topList <- order(GSEAres$FDR, GSEAres$pval)
+    for(j in 1:min(topGS,length(topList))) {
+      output.prefix00 <- paste0(output.prefix0, ".top_", j, "_GS_detail")
+      plotSigGeneSet(gene.set, topList[j], gene.score, pdf=paste0(output.prefix00, ".pdf"))
+      writeSigGeneSet(gene.set, topList[j], gene.score, file=paste0(output.prefix00, ".txt")) 
+    }
+  }
+  GSEAres.list # return a list of GSEA results for meta analysis
+}
+
