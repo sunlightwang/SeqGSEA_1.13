@@ -4,7 +4,7 @@
 An all-in function that allows end users to apply SeqGSEA to their data with one step.
 }
 \description{
-This function provides typic SeqGSEA analysis pipelines for end users to apply the SeqGSEA method in the 
+This function provides typical SeqGSEA analysis pipelines for end users to apply the SeqGSEA method in the 
 easiest fashion. It assumes the pipelines start with exon reads counts, even for the DE-only analysis. 
 Users should specify their file locations and a few parameters before running this pipeline. 
 
@@ -40,7 +40,7 @@ runSeqGSEA(data.dir, case.pattern, ctrl.pattern, geneset.file, output.prefix, to
   \item{seed}{an integer or NULL, used for setting the seeds to generate random numbers. The same seed will guarantee the same analysis results given by SeqGSEA. Default: NULL.}
   \item{minExonReadCount}{an integer. An exon with total read count across all samples less than this number will be marked as untestable and be excluded in SeqGSEA analysis. Default: 5.}
   \item{integrationMethod}{one of the three integration methods for DE and DS score integration: linear, quadratic, or rank. Default: linear.}
-  \item{DEweight}{a real number between 0 and 1 OR a vector of those. Each number is the DE weight in DE and DS integration. If using a vector of real numbres, SeqGSEA will run with each of them individually. Default: 0.5.}
+  \item{DEweight}{a real number between 0 and 1 OR a vector of those. Each number is the DE weight in DE and DS integration. If using a vector of real numbers, SeqGSEA will run with each of them individually. Default: 0.5.}
   \item{DEonly}{logical, whether to run SeqGSEA only considering DE. Default: FALSE}
   \item{minGSsize}{an integer. The minimum gene set size: gene sets with genes less than this number will be skipped. Default: 5.}
   \item{maxGSsize}{an integer. The maximum gene set size: gene sets with genes greater than this number will be skipped. Default: 1000.}
