@@ -56,7 +56,8 @@ export(
     "topDSGenes",
     "topGeneSets",
     "writeSigGeneSet",
-    "writeScores"
+    "writeScores",
+    "runSeqGSEA"
 )
 exportMethods(
     "counts",
