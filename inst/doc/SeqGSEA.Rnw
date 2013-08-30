@@ -81,7 +81,7 @@ before you install \Rpackage{SeqGSEA}.
 To load the \Rpackage{SeqGSEA} package, type {\tt library(SeqGSEA)}. 
 To get an overview of this package, type {\tt ?SeqGSEA}. 
 <<SeqGSEA, echo=TRUE, print=FALSE>>=
-  library(SeqGSEA)
+library(SeqGSEA)
 @
 <<help, eval=FALSE>>=
 ? SeqGSEA
@@ -111,13 +111,13 @@ is an example showing the steps to create a new \Robject{ReadCountSet} object, c
 a \Robject{ReadCountSet} object from your own data should refer to Section \ref{sec:example}. 
 
 <<ReadCountSet, echo=TRUE, print=FALSE>>=
-  rcounts <- cbind(t(sapply(1:10, function(x) {rnbinom(5, size=10, prob=runif(1))} )), 
-                   t(sapply(1:10, function(x) {rnbinom(5, size=10, prob=runif(1))} )))
-  colnames(rcounts) <- c(paste("S", 1:5, sep=""), paste("C", 1:5, sep="")) 
-  geneIDs <- c(rep("G1", 4), rep("G2", 6))
-  exonIDs <- c(paste("E", 1:4, sep=""), paste("E", 1:6, sep=""))
-  RCS <- newReadCountSet(rcounts, exonIDs, geneIDs)
-  RCS 
+rcounts <- cbind(t(sapply(1:10, function(x) {rnbinom(5, size=10, prob=runif(1))} )), 
+                 t(sapply(1:10, function(x) {rnbinom(5, size=10, prob=runif(1))} )))
+colnames(rcounts) <- c(paste("S", 1:5, sep=""), paste("C", 1:5, sep="")) 
+geneIDs <- c(rep("G1", 4), rep("G2", 6))
+exonIDs <- c(paste("E", 1:4, sep=""), paste("E", 1:6, sep=""))
+RCS <- newReadCountSet(rcounts, exonIDs, geneIDs)
+RCS 
 @
 
 %------------------------------------------------------------------
@@ -126,8 +126,8 @@ a \Robject{ReadCountSet} object from your own data should refer to Section \ref{
 To better illustrate DS analysis functions, we load an example \Robject{ReadCountSet} object from a 
 real RNA-Seq data set as follows. 
 <<RCS_example, echo=TRUE>>=
-  data(RCS_example, package="SeqGSEA")
-  RCS_example
+data(RCS_example, package="SeqGSEA")
+RCS_example
 @
 
 This example \Robject{ReadCountSet} object is comprised of 20 samples and 5,000 exons, 
@@ -135,7 +135,7 @@ part of the prostate cancer RNA-Seq data set \citep{CancerData}. With the functi
 \Rfunction{geneID} and the script below, we can easily check the number of genes involved 
 in this data set. 
 <<geneID, echo=TRUE>>=
-  length(unique(geneID(RCS_example)))
+length(unique(geneID(RCS_example)))
 @
 
 Noticed that some exons are too short or not expressed, we should first 
@@ -146,7 +146,7 @@ to be excluded in downstream analysis. Users can also exclude genes
 with no or low expression from downstream analysis by 
 checking \Rfunction{geneTestability}.
 <<exonTestability, echo=TRUE>>=
-  RCS_example <- exonTestability(RCS_example, cutoff = 5)
+RCS_example <- exonTestability(RCS_example, cutoff = 5)
 @
 
 Then, the main DS analysis is executed using function \Rfunction{estiExonNBstat} for exon DS 
@@ -154,9 +154,9 @@ NB-statistics and function \Rfunction{estiGeneNBstat} for gene DS NB-statistics 
 exon NB-statistics. Please refer to \cite{DSGseq} for detailed statistic analysis regarding 
 differential splicing from exon count data. 
 <<DSanalysis, echo=TRUE>>=
-  RCS_example <- estiExonNBstat(RCS_example)
-  RCS_example <- estiGeneNBstat(RCS_example)
-  head(fData(RCS_example)[, c("exonIDs", "geneIDs", "testable", "NBstat")])
+RCS_example <- estiExonNBstat(RCS_example)
+RCS_example <- estiGeneNBstat(RCS_example)
+head(fData(RCS_example)[, c("exonIDs", "geneIDs", "testable", "NBstat")])
 @
 
 We run DS analysis on the permutation data sets as well. Here we set to run permutation 20 times
@@ -164,22 +164,22 @@ for demonstration; however, in practice at least ~1,000 permutations are recomme
 we first generate a permutation matrix, each column corresponding to each permutation; then 
 run DS analysis on the permutation data sets, and updated \Robject{permute\_NBstat\_gene} slot for results. 
 <<DSperm, echo=TRUE>>=
-  permuteMat <- genpermuteMat(RCS_example, times=20)
-  RCS_example <- DSpermute4GSEA(RCS_example, permuteMat)
-  head(RCS_example@permute_NBstat_gene)
+permuteMat <- genpermuteMat(RCS_example, times=20)
+RCS_example <- DSpermute4GSEA(RCS_example, permuteMat)
+head(RCS_example@permute_NBstat_gene)
 @
 
 The DS NB-statistics from the permutation data sets offer an empirical background of NB-statistics 
 on the real data set. By normalizing NB-statistics against this background, we get the DS scores, which
 will be used in integrated GSEA runs (Section \ref{sec:GSEA}). 
 <<DSscores, echo=TRUE>>=
-  DSscore.normFac <- normFactor(RCS_example@permute_NBstat_gene)
-  DSscore <- scoreNormalization(RCS_example@featureData_gene$NBstat, 
-                                DSscore.normFac)
-  DSscore.perm <- scoreNormalization(RCS_example@permute_NBstat_gene, 
-                                     DSscore.normFac)
-  DSscore[1:5]
-  DSscore.perm[1:5,1:10]
+DSscore.normFac <- normFactor(RCS_example@permute_NBstat_gene)
+DSscore <- scoreNormalization(RCS_example@featureData_gene$NBstat, 
+                              DSscore.normFac)
+DSscore.perm <- scoreNormalization(RCS_example@permute_NBstat_gene, 
+                                   DSscore.normFac)
+DSscore[1:5]
+DSscore.perm[1:5,1:10]
 @
 
 %------------------------------------------------------------------
@@ -190,8 +190,8 @@ and the permutation data sets, we can also calculate a permutation p-value
 for each gene's DS significance in the studied data set. 
 \begin{center}
 <<DSpval, echo=TRUE,print=FALSE>>=
-  RCS_example <- DSpermutePval(RCS_example, permuteMat)
-  head(DSresultGeneTable(RCS_example))
+RCS_example <- DSpermutePval(RCS_example, permuteMat)
+head(DSresultGeneTable(RCS_example))
 @
 \end{center}
 The adjusted p-values accounting for multiple testings were given by the BH 
@@ -209,9 +209,9 @@ With \Rpackage{SeqGSEA}, users usually analyze DE and DS simultaneously,
 so the package includes the function \Rfunction{getGeneCount} to facilitate 
 gene read count calculation from a \Robject{ReadCountSet} object. 
 <<genecount, echo=TRUE>>=
-  geneCounts <- getGeneCount(RCS_example)
-  dim(geneCounts) # 182  20
-  head(geneCounts)
+geneCounts <- getGeneCount(RCS_example)
+dim(geneCounts) # 182  20
+head(geneCounts)
 @
 This function results in a matrix of 182 rows and 20 columns, corresponding 
 to 182 genes and 20 samples. 
@@ -228,8 +228,8 @@ basic DE analysis based on \Rpackage{DESeq} including size factor estimation and
 dispersion estimation, is encapsulated in the function \Rfunction{runDESeq}. 
 \begin{center}
 <<DEseq, echo=TRUE,print=FALSE>>=
-  label <- label(RCS_example)
-  DEG <- runDESeq(geneCounts, label)
+label <- label(RCS_example)
+DEG <- runDESeq(geneCounts, label)
 @
 \end{center}
 \noindent
@@ -242,25 +242,25 @@ quantify each gene's expression difference between sample groups.
 
 The NB statistics for DE can be achieved by the following scripts. 
 <<DSNB, echo=TRUE>>=
-  DEGres <- DENBStat4GSEA(DEG)
-  DEGres[1:5, "NBstat"]
+DEGres <- DENBStat4GSEA(DEG)
+DEGres[1:5, "NBstat"]
 @
 Similarly, we run DE analysis on the permutation data sets as well. The \Robject{permuteMat} 
 should be the same as used in DS analysis on the permutation data sets. 
 <<DSNBpermut, echo=TRUE>>=
-  DEpermNBstat <- DENBStatPermut4GSEA(DEG, permuteMat)
-  DEpermNBstat[1:5, 1:10]
+DEpermNBstat <- DENBStatPermut4GSEA(DEG, permuteMat)
+DEpermNBstat[1:5, 1:10]
 @
 
 Once again, the DE NB-statistics from the permutation data sets offer an empirical background, so 
 we can normalize NB-statistics against this background. By doing so, we get the DE scores, 
 which will also be used in integrated GSEA runs (Section \ref{sec:GSEA}).
 <<DEscores, echo=TRUE>>=
-  DEscore.normFac <- normFactor(DEpermNBstat)
-  DEscore <- scoreNormalization(DEGres$NBstat, DEscore.normFac)
-  DEscore.perm <- scoreNormalization(DEpermNBstat, DEscore.normFac)
-  DEscore[1:5]
-  DEscore.perm[1:5, 1:10]
+DEscore.normFac <- normFactor(DEpermNBstat)
+DEscore <- scoreNormalization(DEGres$NBstat, DEscore.normFac)
+DEscore.perm <- scoreNormalization(DEpermNBstat, DEscore.normFac)
+DEscore[1:5]
+DEscore.perm[1:5, 1:10]
 @
 
 %------------------------------------------------------------------
@@ -269,16 +269,16 @@ which will also be used in integrated GSEA runs (Section \ref{sec:GSEA}).
 Similar to DS analysis, comparing NB-statistics on the real data set and those on the 
 permutation data sets, we can get permutation p-values for each gene's DE significance. 
 <<DEpval,echo=TRUE>>=
-  DEGres <- DEpermutePval(DEGres, DEpermNBstat) 
-  DEGres[1:6, c("NBstat", "perm.pval", "perm.padj")]
+DEGres <- DEpermutePval(DEGres, DEpermNBstat) 
+DEGres[1:6, c("NBstat", "perm.pval", "perm.padj")]
 @
 For a comparison to the nominal p-values from exact testing and forming comprehensive results, 
 users can run \Rfunction{DENBTest} first and then \Rfunction{DEpermutePval}, 
 which generates results as follows. 
 <<DEpval2,echo=TRUE>>=
-  DEGres <- DENBTest(DEG)
-  DEGres <- DEpermutePval(DEGres, DEpermNBstat) 
-  DEGres[1:6, c("NBstat", "pval", "padj", "perm.pval", "perm.padj")]
+DEGres <- DENBTest(DEG)
+DEGres <- DEpermutePval(DEGres, DEpermNBstat) 
+DEGres[1:6, c("NBstat", "pval", "padj", "perm.pval", "perm.padj")]
 @
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -297,10 +297,10 @@ from 0 (i.e., DS only) to 1 (i.e., DE only). Visualization of gene scores can be
 by applying the \Rfunction{plotGeneScore} function. 
 
 <<genescore_l, echo=TRUE, fig=TRUE>>=
-  gene.score <- geneScore(DEscore, DSscore, method="linear", DEweight = 0.3)
-  gene.score.perm <- genePermuteScore(DEscore.perm, DSscore.perm, 
-                                      method="linear",  DEweight=0.3)
-  plotGeneScore(gene.score, gene.score.perm)
+gene.score <- geneScore(DEscore, DSscore, method="linear", DEweight = 0.3)
+gene.score.perm <- genePermuteScore(DEscore.perm, DSscore.perm, 
+                                    method="linear",  DEweight=0.3)
+plotGeneScore(gene.score, gene.score.perm)
 @
 
 \begin{figure}
@@ -321,10 +321,10 @@ one method for the rank-based integration strategy: using data-set-specific rank
 The plot for integrated gene scores is shown in Fig. \ref{fig:gsr}. 
 
 <<genescore_r, echo=TRUE, fig=TRUE>>=
-  gene.score <- geneScore(DEscore, DSscore, method="rank", DEweight = 0.3)
-  gene.score.perm <- genePermuteScore(DEscore.perm, DSscore.perm, 
-                                      method="rank",  DEweight=0.3)
-  plotGeneScore(gene.score, gene.score.perm)
+gene.score <- geneScore(DEscore, DSscore, method="rank", DEweight = 0.3)
+gene.score.perm <- genePermuteScore(DEscore.perm, DSscore.perm, 
+                                    method="rank",  DEweight=0.3)
+plotGeneScore(gene.score, gene.score.perm)
 @
 
 \begin{figure}
@@ -344,10 +344,10 @@ DE and DS scores on both real and permutation data sets.
 This provides a method in a global manner. The plot of gene scores is shown in
 Fig. \ref{fig:gsgr}. 
 <<genescore_gr, echo=TRUE, fig=TRUE>>=
-  combine <- rankCombine(DEscore, DSscore, DEscore.perm, DSscore.perm, DEweight=0.3) 
-  gene.score <- combine$geneScore
-  gene.score.perm <- combine$genePermuteScore
-  plotGeneScore(gene.score, gene.score.perm)
+combine <- rankCombine(DEscore, DSscore, DEscore.perm, DSscore.perm, DEweight=0.3) 
+gene.score <- combine$geneScore
+gene.score.perm <- combine$genePermuteScore
+plotGeneScore(gene.score, gene.score.perm)
 @
 
 \begin{figure}
@@ -383,8 +383,8 @@ Below is shown an example of the \Robject{SeqGeneSet} object, which contains inf
 how many gene sets in this object and the names/sizes/descriptions of each gene set. 
 
 <<seqgeneset, echo=TRUE>>=
-  data(GS_example, package="SeqGSEA") 
-  GS_example
+data(GS_example, package="SeqGSEA") 
+GS_example
 @
 
 %------------------------------------------------------------------
@@ -396,8 +396,8 @@ be executed; and the \Rfunction{topGeneSets} allows users promptly access to the
 top significant gene sets. 
 
 <<GSEAmain, echo=TRUE>>=
-  GS_example <- GSEnrichAnalyze(GS_example, gene.score, gene.score.perm)
-  topGeneSets(GS_example, 5)
+GS_example <- GSEnrichAnalyze(GS_example, gene.score, gene.score.perm)
+topGeneSets(GS_example, 5)
 @
 
 The main GSEA includes several steps detailed in \cite{Wang13} and its original paper 
@@ -416,7 +416,7 @@ empirical background provided by the NES on the permutation data sets
 (Fig. \ref{fig:es}). 
 
 <<plotES, echo=TRUE, fig=TRUE>>=
-  plotES(GS_example)
+plotES(GS_example)
 @
 
 \begin{figure}
@@ -435,7 +435,7 @@ plot is not shown in this vignette as the distributions can be far from the real
 due to the limited permutation times. 
 
 <<plotSig, echo=TRUE, fig=FALSE>>=
-  plotSig(GS_example)
+plotSig(GS_example)
 @
 
 The \Rfunction{plotSigGS} function is to plot detailed results of a particular 
@@ -443,7 +443,7 @@ gene set that has been analyzed. Information in the plot includes running enrich
 null NES on the permutation data sets. See Fig. \ref{fig:siggs} for an example. 
 
 <<plotSigGS, echo=TRUE, fig=TRUE, width=9, height=4.5>>=
-  plotSigGeneSet(GS_example, 9, gene.score) # 9th gene set is the most significant one.
+plotSigGeneSet(GS_example, 9, gene.score) # 9th gene set is the most significant one.
 @
 
 \begin{figure}
@@ -460,7 +460,7 @@ write the detailed information of any analyzed gene sets, including NES, p-value
 and the leading set (see the definition in \cite{Wang13}). An example is shown below. 
 
 <<wrightSigGS, echo=TRUE>>=
-  writeSigGeneSet(GS_example, 9, gene.score) # 9th gene set is the most significant one.
+writeSigGeneSet(GS_example, 9, gene.score) # 9th gene set is the most significant one.
 @
 
 The \Rfunction{GSEAresultTable} generates a summary table of the GSEA analysis, 
@@ -492,11 +492,11 @@ running examples showing how the task is running sequentially and in parallel, r
 \item [Run sequentially] without parallel backend registered 
 \begin{center}
 <<doParallel1,echo=TRUE,print=FALSE, warning=TRUE>>=
-  library(doParallel)
-  a <- matrix(1:16, 4, 4)
-  b <- t(a)
-  foreach(b=iter(b, by='col'), .combine=cbind) %dopar%
-    (a %*% b)
+library(doParallel)
+a <- matrix(1:16, 4, 4)
+b <- t(a)
+foreach(b=iter(b, by='col'), .combine=cbind) %dopar%
+  (a %*% b)
 @
 \end{center}
 Although the warning message didn't appear here, you would definitely see a warning 
@@ -507,14 +507,14 @@ executing \%dopar\% sequentially: no parallel backend registered
 \item [Run in parallel] with two cores 
 \begin{center}
 <<doParallel2,echo=TRUE,print=FALSE, >>=
-  library(doParallel)
-  cl <- makeCluster(2) # specify 2 cores to be used in this computing 
-  registerDoParallel(cl)
-  getDoParWorkers() # 2
-  a <- matrix(1:16, 4, 4)
-  b <- t(a)
-  foreach(b=iter(b, by='col'), .combine=cbind) %dopar%
-    (a %*% b)
+library(doParallel)
+cl <- makeCluster(2) # specify 2 cores to be used in this computing 
+registerDoParallel(cl)
+getDoParWorkers() # 2
+a <- matrix(1:16, 4, 4)
+b <- t(a)
+foreach(b=iter(b, by='col'), .combine=cbind) %dopar%
+  (a %*% b)
 @
 \end{center}
 \end{description}
@@ -579,95 +579,95 @@ We divide the process into five steps for a complete SeqGSEA run.
 \begin{description}
 \item [Step 0:] Initialization. (Users should change values in this part accordingly.)
 <<Initialization>>=
-  rm(list=ls())
-  # input count data files
-  data.dir <- system.file("extdata", package="SeqGSEA", mustWork=TRUE)
-  case.pattern <- "^SC"  # file name starting with "SC"
-  ctrl.pattern <- "^SN"  # file name starting with "SN"
-  case.files <- dir(data.dir, pattern=case.pattern, full.names = TRUE)
-  control.files <- dir(data.dir, pattern=ctrl.pattern, full.names = TRUE)
-  # gene set file
-  geneset.file <- system.file("extdata", "gs_symb.txt",  
-                              package="SeqGSEA", mustWork=TRUE)
-  # output file prefix 
-  output.prefix <- "SeqGSEA.test"
-  # setup parallel backend 
-  library(doParallel)
-  cl <- makeCluster(2) # specify 2 cores to be used in computing 
-  registerDoParallel(cl) # parallel backend registration
-  # setup permutation times
-  perm.times <- 20 # change the number to >= 1000 in your analysis 
+rm(list=ls())
+# input count data files
+data.dir <- system.file("extdata", package="SeqGSEA", mustWork=TRUE)
+case.pattern <- "^SC"  # file name starting with "SC"
+ctrl.pattern <- "^SN"  # file name starting with "SN"
+case.files <- dir(data.dir, pattern=case.pattern, full.names = TRUE)
+control.files <- dir(data.dir, pattern=ctrl.pattern, full.names = TRUE)
+# gene set file
+geneset.file <- system.file("extdata", "gs_symb.txt",  
+                            package="SeqGSEA", mustWork=TRUE)
+# output file prefix 
+output.prefix <- "SeqGSEA.test"
+# setup parallel backend 
+library(doParallel)
+cl <- makeCluster(2) # specify 2 cores to be used in computing 
+registerDoParallel(cl) # parallel backend registration
+# setup permutation times
+perm.times <- 20 # change the number to >= 1000 in your analysis 
 @
 
 \item [Step 1:] DS analysis
 <<DS_analysis>>=
-  # load exon read count data
-  RCS <- loadExonCountData(case.files, control.files)
-  # remove genes with low exprssion 
-  RCS <- exonTestability(RCS, cutoff=5)
-  geneTestable <- geneTestability(RCS)
-  RCS <- subsetByGenes(RCS, unique(geneID(RCS))[ geneTestable ])
-  # get gene IDs, which will be used in initialization of gene set
-  geneIDs <- unique(geneID(RCS))
-  # calculate DS NB statistics
-  RCS <- estiExonNBstat(RCS)
-  RCS <- estiGeneNBstat(RCS)
-  # calculate DS NB statistics on the permutation data sets
-  permuteMat <- genpermuteMat(RCS, times=perm.times)
-  RCS <- DSpermute4GSEA(RCS, permuteMat)
+# load exon read count data
+RCS <- loadExonCountData(case.files, control.files)
+# remove genes with low exprssion 
+RCS <- exonTestability(RCS, cutoff=5)
+geneTestable <- geneTestability(RCS)
+RCS <- subsetByGenes(RCS, unique(geneID(RCS))[ geneTestable ])
+# get gene IDs, which will be used in initialization of gene set
+geneIDs <- unique(geneID(RCS))
+# calculate DS NB statistics
+RCS <- estiExonNBstat(RCS)
+RCS <- estiGeneNBstat(RCS)
+# calculate DS NB statistics on the permutation data sets
+permuteMat <- genpermuteMat(RCS, times=perm.times)
+RCS <- DSpermute4GSEA(RCS, permuteMat)
 @
 
 
 \item [Step 2:] DE analysis
 <<DE_analysis>>=
-  # get gene read counts
-  geneCounts <- getGeneCount(RCS)
-  # calculate DE NB statistics 
-  label <- label(RCS)
-  DEG <-runDESeq(geneCounts, label)
-  DEGres <- DENBStat4GSEA(DEG)
-  # calculate DE NB statistics on the permutation data sets
-  DEpermNBstat <- DENBStatPermut4GSEA(DEG, permuteMat) # permutation
+# get gene read counts
+geneCounts <- getGeneCount(RCS)
+# calculate DE NB statistics 
+label <- label(RCS)
+DEG <-runDESeq(geneCounts, label)
+DEGres <- DENBStat4GSEA(DEG)
+# calculate DE NB statistics on the permutation data sets
+DEpermNBstat <- DENBStatPermut4GSEA(DEG, permuteMat) # permutation
 @
 
 \item [Step 3:] score integration
 <<score_int>>=
-  # DE score normalization
-  DEscore.normFac <- normFactor(DEpermNBstat)
-  DEscore <- scoreNormalization(DEGres$NBstat, DEscore.normFac)
-  DEscore.perm <- scoreNormalization(DEpermNBstat, DEscore.normFac)
-  # DS score normalization
-  DSscore.normFac <- normFactor(RCS@permute_NBstat_gene)
-  DSscore <- scoreNormalization(RCS@featureData_gene$NBstat, DSscore.normFac)
-  DSscore.perm <- scoreNormalization(RCS@permute_NBstat_gene, DSscore.normFac)
-  # score integration
-  gene.score <- geneScore(DEscore, DSscore, DEweight=0.5)
-  gene.score.perm <- genePermuteScore(DEscore.perm, DSscore.perm, DEweight=0.5)
-  # visilization of scores 
-  # NOT run in the example; users to uncomment the following 6 lines to run 
-  #plotGeneScore(DEscore, DEscore.perm, pdf=paste(output.prefix,".DEScore.pdf",sep=""),
-  #              main="Expression")
-  #plotGeneScore(DSscore, DSscore.perm, pdf=paste(output.prefix,".DSScore.pdf",sep=""), 
-  #              main="Splicing")
-  #plotGeneScore(gene.score, gene.score.perm, 
-  #              pdf=paste(output.prefix,".GeneScore.pdf",sep=""))
+# DE score normalization
+DEscore.normFac <- normFactor(DEpermNBstat)
+DEscore <- scoreNormalization(DEGres$NBstat, DEscore.normFac)
+DEscore.perm <- scoreNormalization(DEpermNBstat, DEscore.normFac)
+# DS score normalization
+DSscore.normFac <- normFactor(RCS@permute_NBstat_gene)
+DSscore <- scoreNormalization(RCS@featureData_gene$NBstat, DSscore.normFac)
+DSscore.perm <- scoreNormalization(RCS@permute_NBstat_gene, DSscore.normFac)
+# score integration
+gene.score <- geneScore(DEscore, DSscore, DEweight=0.5)
+gene.score.perm <- genePermuteScore(DEscore.perm, DSscore.perm, DEweight=0.5)
+# visilization of scores 
+# NOT run in the example; users to uncomment the following 6 lines to run 
+#plotGeneScore(DEscore, DEscore.perm, pdf=paste(output.prefix,".DEScore.pdf",sep=""),
+#              main="Expression")
+#plotGeneScore(DSscore, DSscore.perm, pdf=paste(output.prefix,".DSScore.pdf",sep=""), 
+#              main="Splicing")
+#plotGeneScore(gene.score, gene.score.perm, 
+#              pdf=paste(output.prefix,".GeneScore.pdf",sep=""))
 @
 
 \item [Step 4:] main GSEA
 <<main_gsea>>=
-  # load gene set data
-  gene.set <- loadGenesets(geneset.file, geneIDs, geneID.type="ensembl",
-                             genesetsize.min = 5, genesetsize.max = 1000)
-  # enrichment analysis
-  gene.set <- GSEnrichAnalyze(gene.set, gene.score, gene.score.perm, weighted.type=1)
-  # format enrichment analysis results
-  GSEAres <- GSEAresultTable(gene.set, TRUE)
-  # output results 
-  # NOT run in the example; users to uncomment the following 4 lines to run 
-  #write.table(GSEAres, paste(output.prefix,".GSEA.result.txt",sep=""), 
-  #            quote=FALSE, sep="\t", row.names=FALSE)
-  #plotES(gene.set, pdf=paste(output.prefix,".GSEA.ES.pdf",sep=""))
-  #plotSig(gene.set, pdf=paste(output.prefix,".GSEA.FDR.pdf",sep=""))
+# load gene set data
+gene.set <- loadGenesets(geneset.file, geneIDs, geneID.type="ensembl",
+                         genesetsize.min = 5, genesetsize.max = 1000)
+# enrichment analysis
+gene.set <- GSEnrichAnalyze(gene.set, gene.score, gene.score.perm, weighted.type=1)
+# format enrichment analysis results
+GSEAres <- GSEAresultTable(gene.set, TRUE)
+# output results 
+# NOT run in the example; users to uncomment the following 4 lines to run 
+#write.table(GSEAres, paste(output.prefix,".GSEA.result.txt",sep=""), 
+#            quote=FALSE, sep="\t", row.names=FALSE)
+#plotES(gene.set, pdf=paste(output.prefix,".GSEA.ES.pdf",sep=""))
+#plotSig(gene.set, pdf=paste(output.prefix,".GSEA.FDR.pdf",sep=""))
 @
 \end{description}
 
@@ -688,69 +688,69 @@ such analysis. It includes 4 steps as follows.
 \begin{description}
 \item [Step 0:] Initialization. (Users should change values in this part accordingly.)
 <<Initialization_DE>>=
-  rm(list=ls())
-  # input count data files
-  data.dir <- system.file("extdata", package="SeqGSEA", mustWork=TRUE)
-  count.file <- paste(data.dir,"geneCounts.txt",sep="/")
-  # gene set file
-  geneset.file <- system.file("extdata", "gs_symb.txt",  
-                              package="SeqGSEA", mustWork=TRUE)
-  # output file prefix 
-  output.prefix <- "SeqGSEA.test"
-  # setup parallel backend 
-  library(doParallel)
-  cl <- makeCluster(2) # specify 2 cores to be used in computing 
-  registerDoParallel(cl) # parallel backend registration
-  # setup permutation times
-  perm.times <- 20 # change the number to >= 1000 in your analysis 
+rm(list=ls())
+# input count data files
+data.dir <- system.file("extdata", package="SeqGSEA", mustWork=TRUE)
+count.file <- paste(data.dir,"geneCounts.txt",sep="/")
+# gene set file
+geneset.file <- system.file("extdata", "gs_symb.txt",  
+                            package="SeqGSEA", mustWork=TRUE)
+# output file prefix 
+output.prefix <- "SeqGSEA.test"
+# setup parallel backend 
+library(doParallel)
+cl <- makeCluster(2) # specify 2 cores to be used in computing 
+registerDoParallel(cl) # parallel backend registration
+# setup permutation times
+perm.times <- 20 # change the number to >= 1000 in your analysis 
 @
 
 \item [Step 1:] DE analysis
 <<DE_analysis_DE>>=
-  # load gene read count data
-  geneCounts <- read.table(count.file)
-  # speficify the labels of each sample
-  label <- as.factor(c(rep(1,10), rep(0,10)))
-  # calculate DE NB statistics 
-  DEG <-runDESeq(geneCounts, label)
-  DEGres <- DENBStat4GSEA(DEG)
-  # calculate DE NB statistics on the permutation data sets
-  permuteMat <- genpermuteMat(label, times=perm.times)
-  DEpermNBstat <- DENBStatPermut4GSEA(DEG, permuteMat) # permutation
+# load gene read count data
+geneCounts <- read.table(count.file)
+# speficify the labels of each sample
+label <- as.factor(c(rep(1,10), rep(0,10)))
+# calculate DE NB statistics 
+DEG <-runDESeq(geneCounts, label)
+DEGres <- DENBStat4GSEA(DEG)
+# calculate DE NB statistics on the permutation data sets
+permuteMat <- genpermuteMat(label, times=perm.times)
+DEpermNBstat <- DENBStatPermut4GSEA(DEG, permuteMat) # permutation
 @
 
 \item [Step 2:] score normalization 
 <<score_int_DE>>=
-  # DE score normalization
-  DEscore.normFac <- normFactor(DEpermNBstat)
-  DEscore <- scoreNormalization(DEGres$NBstat, DEscore.normFac)
-  DEscore.perm <- scoreNormalization(DEpermNBstat, DEscore.normFac)
-  # score integration - DSscore can be null 
-  gene.score <- geneScore(DEscore, DEweight=1)
-  gene.score.perm <- genePermuteScore(DEscore.perm, DEweight=1)  # visilization of scores 
-  # NOT run in the example; users to uncomment the following 6 lines to run 
-  #plotGeneScore(DEscore, DEscore.perm, pdf=paste(output.prefix,".DEScore.pdf",sep=""),
-  #              main="Expression")
-  #plotGeneScore(gene.score, gene.score.perm, 
-  #              pdf=paste(output.prefix,".GeneScore.pdf",sep=""))
+# DE score normalization
+DEscore.normFac <- normFactor(DEpermNBstat)
+DEscore <- scoreNormalization(DEGres$NBstat, DEscore.normFac)
+DEscore.perm <- scoreNormalization(DEpermNBstat, DEscore.normFac)
+# score integration - DSscore can be null 
+gene.score <- geneScore(DEscore, DEweight=1)
+gene.score.perm <- genePermuteScore(DEscore.perm, DEweight=1)  # visilization of scores 
+# NOT run in the example; users to uncomment the following 6 lines to run 
+#plotGeneScore(DEscore, DEscore.perm, pdf=paste(output.prefix,".DEScore.pdf",sep=""),
+#              main="Expression")
+#plotGeneScore(gene.score, gene.score.perm, 
+#              pdf=paste(output.prefix,".GeneScore.pdf",sep=""))
 @
 
 \item [Step 3:] main GSEA
 <<main_gsea_DE>>=
-  # load gene set data
-  geneIDs <- rownames(geneCounts)
-  gene.set <- loadGenesets(geneset.file, geneIDs, geneID.type="ensembl",
-                             genesetsize.min = 5, genesetsize.max = 1000)
-  # enrichment analysis
-  gene.set <- GSEnrichAnalyze(gene.set, gene.score, gene.score.perm, weighted.type=1)
-  # format enrichment analysis results
-  GSEAres <- GSEAresultTable(gene.set, TRUE)
-  # output results 
-  # NOT run in the example; users to uncomment the following 4 lines to run 
-  #write.table(GSEAres, paste(output.prefix,".GSEA.result.txt",sep=""), 
-  #            quote=FALSE, sep="\t", row.names=FALSE)
-  #plotES(gene.set, pdf=paste(output.prefix,".GSEA.ES.pdf",sep=""))
-  #plotSig(gene.set, pdf=paste(output.prefix,".GSEA.FDR.pdf",sep=""))
+# load gene set data
+geneIDs <- rownames(geneCounts)
+gene.set <- loadGenesets(geneset.file, geneIDs, geneID.type="ensembl",
+                         genesetsize.min = 5, genesetsize.max = 1000)
+# enrichment analysis
+gene.set <- GSEnrichAnalyze(gene.set, gene.score, gene.score.perm, weighted.type=1)
+# format enrichment analysis results
+GSEAres <- GSEAresultTable(gene.set, TRUE)
+# output results 
+# NOT run in the example; users to uncomment the following 4 lines to run 
+#write.table(GSEAres, paste(output.prefix,".GSEA.result.txt",sep=""), 
+#            quote=FALSE, sep="\t", row.names=FALSE)
+#plotES(gene.set, pdf=paste(output.prefix,".GSEA.ES.pdf",sep=""))
+#plotSig(gene.set, pdf=paste(output.prefix,".GSEA.FDR.pdf",sep=""))
 @
 \end{description}
 
@@ -768,31 +768,31 @@ Follow the example below to start your first SeqGSEA analysis now!
 
 \begin{description}
 <<runSeqGSEA>>=
-  ### Initialization ###
-  # input file location and pattern
-  data.dir <- system.file("extdata", package="SeqGSEA", mustWork=TRUE)
-  case.pattern <- "^SC" # file name starting with "SC"
-  ctrl.pattern <- "^SN" # file name starting with "SN"
-  # gene set file and type
-  geneset.file <- system.file("extdata", "gs_symb.txt",
-                              package="SeqGSEA", mustWork=TRUE)
-  geneID.type <- "ensembl"
-  # output file prefix
-  output.prefix <- "K:/UoN/SeqGSEA/example"
-  # analysis parameters
-  nCores <- 8
-  perm.times <- 1000 # >= 1000 recommended
-  DEonly <- FALSE
-  DEweight <- c(0.2, 0.5, 0.8)  # a vector for different weights
-  integrationMethod <- "linear"
+### Initialization ###
+# input file location and pattern
+data.dir <- system.file("extdata", package="SeqGSEA", mustWork=TRUE)
+case.pattern <- "^SC" # file name starting with "SC"
+ctrl.pattern <- "^SN" # file name starting with "SN"
+# gene set file and type
+geneset.file <- system.file("extdata", "gs_symb.txt",
+                            package="SeqGSEA", mustWork=TRUE)
+geneID.type <- "ensembl"
+# output file prefix
+output.prefix <- "K:/UoN/SeqGSEA/example"
+# analysis parameters
+nCores <- 8
+perm.times <- 1000 # >= 1000 recommended
+DEonly <- FALSE
+DEweight <- c(0.2, 0.5, 0.8)  # a vector for different weights
+integrationMethod <- "linear"
 
-  ### one step SeqGSEA running ###
-  # NOT run in the example; uncomment the following 4 lines to run 
-  # CAUTION: running the following lines will generate lots of files in your working dir
-  #runSeqGSEA(data.dir=data.dir, case.pattern=case.pattern, ctrl.pattern=ctrl.pattern, 
-  #           geneset.file=geneset.file, geneID.type=geneID.type, output.prefix=output.prefix,
-  #           nCores=nCores, perm.times=perm.times, integrationMethod=integrationMethod,
-  #           DEonly=DEonly, DEweight=DEweight)
+### one step SeqGSEA running ###
+# NOT run in the example; uncomment the following 4 lines to run 
+# CAUTION: running the following lines will generate lots of files in your working dir
+#runSeqGSEA(data.dir=data.dir, case.pattern=case.pattern, ctrl.pattern=ctrl.pattern, 
+#           geneset.file=geneset.file, geneID.type=geneID.type, output.prefix=output.prefix,
+#           nCores=nCores, perm.times=perm.times, integrationMethod=integrationMethod,
+#           DEonly=DEonly, DEweight=DEweight)
 @
 \end{description}
 
@@ -800,7 +800,7 @@ Follow the example below to start your first SeqGSEA analysis now!
 \section{Session information}
 \begin{center}
 <<sessionInfo, echo=TRUE, print=FALSE>>=
-  sessionInfo()
+sessionInfo()
 @
 \end{center}
 
