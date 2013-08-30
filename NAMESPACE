@@ -46,6 +46,7 @@ export(
     "plotSigGeneSet",
     "rankCombine",
     "runDESeq",
+    "runSeqGSEA",
     "scoreNormalization",
     "signifES",
     "size",
