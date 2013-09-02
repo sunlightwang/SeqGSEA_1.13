@@ -3,7 +3,6 @@ Version 1.1.5: (2013-09-01)
 - Added an all-in function runSeqGSEA() for one step analysis
 - Modified genpermuteMat() with invoking set.seed() for reproducibility
 - Vignette updated
-- Maintainer's email changed to Xi.Wang at mdc-berlin.de due to job relocation. 
 
 
 Version 1.1.4: (2013-08-10)
