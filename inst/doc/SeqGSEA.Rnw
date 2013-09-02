@@ -603,7 +603,7 @@ perm.times <- 20 # change the number to >= 1000 in your analysis
 <<DS_analysis>>=
 # load exon read count data
 RCS <- loadExonCountData(case.files, control.files)
-# remove genes with low exprssion 
+# remove genes with low expression 
 RCS <- exonTestability(RCS, cutoff=5)
 geneTestable <- geneTestability(RCS)
 RCS <- subsetByGenes(RCS, unique(geneID(RCS))[ geneTestable ])
