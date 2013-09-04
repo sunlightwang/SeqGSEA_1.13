@@ -778,7 +778,7 @@ geneset.file <- system.file("extdata", "gs_symb.txt",
                             package="SeqGSEA", mustWork=TRUE)
 geneID.type <- "ensembl"
 # output file prefix
-output.prefix <- "K:/UoN/SeqGSEA/example"
+output.prefix <- "SeqGSEA.example"
 # analysis parameters
 nCores <- 8
 perm.times <- 1000 # >= 1000 recommended
