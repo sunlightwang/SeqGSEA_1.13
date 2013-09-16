@@ -168,7 +168,7 @@ sizeOfExcludedGS <- function(GS) {
 ## Class ReadCountSet ##
 ########################
 
-require(Biobase)
+#require(Biobase)
 ReadCountSet <- setClass( "ReadCountSet", 
           contains = "eSet",
           representation = representation(

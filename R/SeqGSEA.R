@@ -82,14 +82,14 @@ rankCombine <- function(DEscore, DSscore, DEscoreMat, DSscoreMat, DEweight=0.5) 
 
 ### dealing with geneset file ### 
 convertEnsembl2Symbol <- function(ensembl.genes) {
-  require(biomaRt)
+  #require(biomaRt)
   ensembl = useMart("ensembl",dataset="hsapiens_gene_ensembl")
   getBM(values = ensembl.genes, attributes = c('ensembl_gene_id','hgnc_symbol'), 
         filters = 'ensembl_gene_id', mart = ensembl, bmHeader=FALSE )
 }
 
 convertSymbol2Ensembl <- function(symbols) {
-  require(biomaRt)
+  #require(biomaRt)
   ensembl = useMart("ensembl",dataset="hsapiens_gene_ensembl")
   getBM(values = symbols, attributes = c('hgnc_symbol', 'ensembl_gene_id'), 
         filters = 'hgnc_symbol', mart = ensembl, bmHeader=FALSE )

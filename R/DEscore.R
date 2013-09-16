@@ -1,7 +1,7 @@
 # copyright: Xi Wang (xi.wang@newcastle.edu.au)
 ## DESeq pipeline w/ permutation for RNASeq_GSEA
-require(DESeq)
-require(locfit)
+#require(DESeq)
+#require(locfit)
 runDESeq <- function(geneCounts, label) {
   DEG <- newCountDataSet( geneCounts, label )
   DEG <- estimateSizeFactors(DEG)
