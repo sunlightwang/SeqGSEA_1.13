@@ -5,7 +5,7 @@
 import sys, collections, itertools, os.path
 
 if len( sys.argv ) != 3:
-   sys.stderr.write( "Script to prepare annotation for DEXSeq.\n\n" )
+   sys.stderr.write( "Script to prepare annotation for SeqGSEA.\n\n" )
    sys.stderr.write( "Usage: python %s <in.gtf> <out.gff>\n\n" % os.path.basename(sys.argv[0]) )
    sys.stderr.write( "This script takes an annotation file in Ensembl GTF format\n" )
    sys.stderr.write( "and outputs a 'flattened' annotation file suitable for use\n" )

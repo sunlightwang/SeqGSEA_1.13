@@ -8,7 +8,7 @@ optParser = optparse.OptionParser(
    description=
       "This script counts how many reads in <s/bam_file> fall onto each exonic " +
       "part given in <flattened_gff_file> and outputs a list of counts in " +
-      "<output_file>, for further analysis with the DEXSeq Bioconductor package. " +
+      "<output_file>, for further analysis with the SeqGSEA Bioconductor package. " +
       "(Notes: The <flattened_gff_file> should be produced with the script " +
       "prepare_exon_annotation_ensembl/refseq.py). <s/bam_file> may be '-' to indicate standard input.",
       
@@ -16,7 +16,7 @@ optParser = optparse.OptionParser(
       "Written by Simon Anders (sanders@fs.tum.de), European Molecular Biology " +
       "Laboratory (EMBL). (c) 2010. Released under the terms of the GNU General " +
       "Public License v3. Part of the 'DEXSeq' package. " + 
-      "Modified by Xi Wang (xi.wang@newcastle.edu.au), UoN, Australia" )
+      "Modified by Xi Wang (xi.wang@newcastle.edu.au), UoN, Australia for SeqGSEA" )
       
 optParser.add_option( "-p", "--paired", type="choice", dest="paired",
    choices = ( "no", "yes" ), default = "no",
