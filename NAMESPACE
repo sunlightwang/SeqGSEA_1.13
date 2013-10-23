@@ -1,8 +1,7 @@
 ##Namespace file for SeqGSEA package
-import(Biobase, BiocGenerics, DESeq, methods)
-importFrom(foreach, foreach)
+import(Biobase, doParallel)
+import(DESeq)
 importFrom(biomaRt, getBM, useMart)
-importFrom(doParallel, registerDoParallel)
 
 export(
     "DENBStat4GSEA",
