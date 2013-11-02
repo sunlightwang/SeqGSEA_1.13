@@ -210,7 +210,9 @@ normES <- function(gene.set) {
     return(gene.set)
   ES.mean <- rowMeans(gene.set@GSEA.ES.perm) 
   gene.set@GSEA.ES <- gene.set@GSEA.ES / ES.mean
+  gene.set@GSEA.ES[is.na(gene.set@GSEA.ES)] <- 0
   gene.set@GSEA.ES.perm <- gene.set@GSEA.ES.perm / ES.mean
+  gene.set@GSEA.ES.perm [is.na(gene.set@GSEA.ES.perm )] <- 1
   gene.set@GSEA.normFlag <- TRUE
   gene.set
 }
