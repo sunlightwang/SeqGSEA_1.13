@@ -1,7 +1,6 @@
 ##Namespace file for SeqGSEA package
-import(Biobase, doParallel)
+import(methods, Biobase, doParallel)
 import(DESeq)
-import(methods)
 importFrom(biomaRt, getBM, useMart)
 
 export(
