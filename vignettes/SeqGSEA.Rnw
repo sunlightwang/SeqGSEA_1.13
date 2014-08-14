@@ -96,6 +96,12 @@ respectively. A guide to parallelize those analyses is given in Section \ref{sec
 \subsection{Package citation}
 %------------------------------------------------------------------
 To cite this package, please cite the article below: \\
+Wang X and Cairns MJ (2014). SeqGSEA: a Bioconductor package for 
+gene set enrichment analysis of RNA-Seq data 
+integrating differential expression and splicing. 
+Bioinformatics, 30(12):1777-9. 
+
+To cite/discuss the method used in this package, please cite the article below: \\
 Wang X and Cairns MJ (2013). Gene set enrichment analysis of RNA-Seq data: 
 integrating differential expression and splicing. 
 BMC Bioinformatics, 14(Suppl 5):S16. 

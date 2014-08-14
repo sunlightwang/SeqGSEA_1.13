@@ -16,10 +16,10 @@ citEntry(
  title="SeqGSEA: a Bioconductor package for gene set enrichment analysis of RNA-Seq data integrating differential expression and splicing", 
  author="Xi Wang and Murray J. Cairns", 
  journal="Bioinformatics", 
- volume="in press",
- pages="",
+ volume="30(12)",
+ pages="1777-9",
  year="2014", 
- textVersion="Wang X and Cairns MJ (2014). SeqGSEA: a Bioconductor package for gene set enrichment analysis of RNA-Seq data integrating differential expression and splicing. Bioinformatics, in press."
+ textVersion="Wang X and Cairns MJ (2014). SeqGSEA: a Bioconductor package for gene set enrichment analysis of RNA-Seq data integrating differential expression and splicing. Bioinformatics, 30(12):1777-9."
 )
 
 
