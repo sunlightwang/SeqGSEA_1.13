@@ -64,7 +64,7 @@ from RNA-Seq data with functional gene set analysis.
 Due to the digital feature of RNA-Seq count data, the package utilizes negative binomial distributions 
 for statistical modeling to first score differential expression and splicing in each gene, respectively. 
 Then, integration strategies are applied to combine the two scores for integrated gene set enrichment analysis. 
-See the publication \cite{Wang13} for more details. 
+See the publications \cite{Wang13} and \cite{Wang14} for more details. 
 The \Rpackage{SeqGSEA} package can also give detection results of differentially expressed genes and differentially
 spliced genes based on sample label permutation. 
 
@@ -96,15 +96,15 @@ respectively. A guide to parallelize those analyses is given in Section \ref{sec
 \subsection{Package citation}
 %------------------------------------------------------------------
 To cite this package, please cite the article below: \\
-Wang X and Cairns MJ (2014). SeqGSEA: a Bioconductor package for 
+Wang X and Cairns MJ (2014). \textbf{SeqGSEA: a Bioconductor package for 
 gene set enrichment analysis of RNA-Seq data 
-integrating differential expression and splicing. 
-Bioinformatics, 30(12):1777-9. 
+integrating differential expression and splicing.} 
+\textit{Bioinformatics}, \textbf{30}(12):1777-9. 
 
 To cite/discuss the method used in this package, please cite the article below: \\
-Wang X and Cairns MJ (2013). Gene set enrichment analysis of RNA-Seq data: 
-integrating differential expression and splicing. 
-BMC Bioinformatics, 14(Suppl 5):S16. 
+Wang X and Cairns MJ (2013). \textbf{Gene set enrichment analysis of RNA-Seq data: 
+integrating differential expression and splicing.} 
+\textit{BMC Bioinformatics}, \textbf{14}(Suppl 5):S16. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Differential splicing analysis and DS scores}\label{sec:DS}
