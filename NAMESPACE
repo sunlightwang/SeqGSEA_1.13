@@ -1,0 +1,70 @@
+##Namespace file for SeqGSEA package
+import(methods, Biobase, doParallel)
+import(DESeq)
+importFrom(biomaRt, getBM, useMart)
+
+export(
+    "DENBStat4GSEA",
+    "DENBStatPermut4GSEA",
+    "DENBTest",
+    "DEpermutePval",
+    "DSpermute4GSEA",
+    "DSpermutePval",
+    "DSresultExonTable",
+    "DSresultGeneTable",
+    "GSEAresultTable",
+    "GSEnrichAnalyze",
+    "calES",
+    "calES.perm",
+    "convertEnsembl2Symbol",
+    "convertSymbol2Ensembl",
+    "estiExonNBstat",
+    "estiGeneNBstat",
+    "exonID",
+    "exonTestability",
+    "geneID",
+    "geneList",
+    "genePermuteScore",
+    "geneScore",
+    "geneSetDescs",
+    "geneSetNames",
+    "geneSetSize",
+    "geneTestability",
+    "genpermuteMat",
+    "getGeneCount",
+    "label",
+    "loadExonCountData",
+    "loadGenesets",
+    "newGeneSets",
+    "newReadCountSet",
+    "normES",
+    "normFactor",
+    "plotES",
+    "plotGeneScore",
+    "plotSig",
+    "plotSigGeneSet",
+    "rankCombine",
+    "runDESeq",
+    "runSeqGSEA",
+    "scoreNormalization",
+    "signifES",
+    "size",
+    "subsetByGenes",
+    "topDEGenes",
+    "topDSExons",
+    "topDSGenes",
+    "topGeneSets",
+    "writeSigGeneSet",
+    "writeScores",
+    "runSeqGSEA"
+)
+exportMethods(
+    "counts",
+    "counts<-",
+    "["
+)
+exportClasses(
+    "SeqGeneSet",
+    "ReadCountSet" 
+)
+
