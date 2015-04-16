@@ -1,0 +1,34 @@
+Version 1.1.5: (2013-09-01)
+
+- Added an all-in function runSeqGSEA() for one step analysis
+- Modified genpermuteMat() with invoking set.seed() for reproducibility
+- Vignette updated
+
+
+Version 1.1.4: (2013-08-10)
+
+- Updated functions to allow DE-only GSEA analysis. 
+- Fixed a few bugs.
+- Vignette updated. 
+
+
+Version 1.1.3: (2013-06-13)
+
+- Sorted out an error due to biomaRt update (thanks to Martin Morgan).
+
+
+Version 1.1.2: (2013-05-01)
+
+- Updated vignette.
+
+
+Version 1.1.1: (2013-04-23)
+
+- The methodology paper of the SeqGSEA package published at BMC Bioinformatics (2013, 14(Suppl 5):S16). 
+- Added a function writeScores to generate DE/DS and gene scores output. 
+
+
+Version 1.0.0 & 1.1.0: (2013-04-04)
+
+- SeqGSEA's first release with Bioconductor 2.12.
+
