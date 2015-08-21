@@ -40,7 +40,7 @@ $^2$Hunter Medical Research Institute, New Lambton, New South Wales, Australia\\
 $^3$Schizophrenia Research Institute, Sydney, New South Wales, Australia\\
 \noindent
 \begin{center}
-{\tt xi.wang@newcastle.edu.au}
+{\tt xi.wang@mdc-berlin.de}
 \end{center}
 \tableofcontents
 
