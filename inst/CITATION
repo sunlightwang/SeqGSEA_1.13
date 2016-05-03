@@ -1,0 +1,25 @@
+citHeader("Please cite the first paper for the SeqGSEA methodology and the other one for the R package.")
+
+citEntry(
+ entry="article",
+ title="Gene Set Enrichment Analysis of RNA-Seq Data: Integrating Differential Expression and Splicing", 
+ author="Xi Wang and Murray J. Cairns", 
+ journal="BMC Bioinformatics", 
+ volume="14(Suppl 5)",
+ pages="S16",
+ year="2013", 
+ textVersion="Wang X and Cairns MJ (2013). Gene Set Enrichment Analysis of RNA-Seq Data: Integrating Differential Expression and Splicing. BMC Bioinformatics, 14(Suppl 5):S16."
+)
+
+citEntry(
+ entry="article",
+ title="SeqGSEA: a Bioconductor package for gene set enrichment analysis of RNA-Seq data integrating differential expression and splicing", 
+ author="Xi Wang and Murray J. Cairns", 
+ journal="Bioinformatics", 
+ volume="30(12)",
+ pages="1777-9",
+ year="2014", 
+ textVersion="Wang X and Cairns MJ (2014). SeqGSEA: a Bioconductor package for gene set enrichment analysis of RNA-Seq data integrating differential expression and splicing. Bioinformatics, 30(12):1777-9."
+)
+
+
