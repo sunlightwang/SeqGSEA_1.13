@@ -3,9 +3,9 @@
 The package generally provides methods for gene set enrichment analysis of high-throughput RNA-Seq data by integrating differential expression and splicing. It uses negative binomial distribution to model read count data, which accounts for sequencing biases and biological variation. Based on permutation tests, statistical significance can also be achieved regarding each gene's differential expression and splicing, respectively.
 
 
-Author: Xi Wang (Xi.Wang at newcastle.edu.au)
+* Author: Xi Wang (Xi.Wang at newcastle.edu.au)
 
-Maintainer: Xi Wang (Xi.Wang at dkfz-heidelberg.de)
+* Maintainer: Xi Wang (Xi.Wang at dkfz-heidelberg.de)
 
 
 ##Citation
@@ -17,12 +17,13 @@ Wang X and Cairns MJ (2014). “SeqGSEA: a Bioconductor package for gene set enr
 
 ##Installation
 To install this package, start R and enter:
-
-source("https://bioconductor.org/biocLite.R")
-
-biocLite("SeqGSEA")
-
+```
+  source("https://bioconductor.org/biocLite.R")
+  biocLite("SeqGSEA")
+```
 
 ##Documentation
 To view documentation for the version of this package installed in your system, start R and enter:
-browseVignettes("SeqGSEA")
+```
+  browseVignettes("SeqGSEA")
+```
