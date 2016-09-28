@@ -13,7 +13,7 @@ Wang X and Cairns MJ (2013). “Gene Set Enrichment Analysis of RNA-Seq Data: In
 
 Wang X and Cairns MJ (2014). “SeqGSEA: a Bioconductor package for gene set enrichment analysis of RNA-Seq data integrating differential expression and splicing.” Bioinformatics, 30(12), pp. 1777-9.
 
-* from within R, enter citation("SeqGSEA")
+* from within R, enter ```citation("SeqGSEA")```
 
 ##Installation
 To install this package, start R and enter:
