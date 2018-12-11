@@ -8,21 +8,22 @@ The package generally provides methods for gene set enrichment analysis of high-
 * Maintainer: Xi Wang (Xi.Wang at dkfz-heidelberg.de)
 
 
-##Citation
+## Citation
 Wang X and Cairns MJ (2013). “Gene Set Enrichment Analysis of RNA-Seq Data: Integrating Differential Expression and Splicing.” BMC Bioinformatics, 14(Suppl 5), pp. S16.
 
 Wang X and Cairns MJ (2014). “SeqGSEA: a Bioconductor package for gene set enrichment analysis of RNA-Seq data integrating differential expression and splicing.” Bioinformatics, 30(12), pp. 1777-9.
 
 * from within R, enter ```citation("SeqGSEA")```
 
-##Installation
+## Installation
 To install this package, start R and enter:
 ```
-  source("https://bioconductor.org/biocLite.R")
-  biocLite("SeqGSEA")
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("SeqGSEA", version = "3.9")
 ```
 
-##Documentation
+## Documentation
 To view documentation for the version of this package installed in your system, start R and enter:
 ```
   browseVignettes("SeqGSEA")
